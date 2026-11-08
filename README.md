@@ -31,10 +31,7 @@ It never holds keys and never signs.
 ## Security
 
 - **No keys:** ckb-msig never asks for, reads or stores private keys, and it never signs. Signing stays in your wallet: ckb-cli, Neuron or an app built on CCC.
-- **Every signature is checked** against the transaction hash and the multisig's members. It's reported and never merged if it:
-  - was made on a different transaction;
-  - comes from a key that isn't a member;
-  - repeats a key that has already signed.
+- **Every signature is checked** against the transaction hash and the multisig's members. It's reported and never merged if it isn't valid for this transaction, or if it repeats a key that has already signed. When a file names the signer, the report says which: made on a different transaction, or from a key that isn't a member.
 - **`convert` is designed never to change the transaction itself.** Its output keeps the input's transaction hash.
 - **Before you sign,** review the transaction in your own wallet. Compare the transaction hash that `ckb-msig inspect` prints with your co-signers.
 - **To report a vulnerability,** please use GitHub's private vulnerability reporting for this repository, not a public issue.
@@ -67,7 +64,7 @@ npx ckb-msig --help
 ```
 
 **Requirements:**
-- Node.js 20 or later.
+- Node.js 22 or later.
 - Most files can be checked offline. ckb-cli transaction files and bare CCC transactions need a CKB node's RPC endpoint, because they don't carry the input cells.
 
 ## Usage
@@ -76,7 +73,7 @@ npx ckb-msig --help
 
 | Command | What it does |
 |---|---|
-| `ckb-msig inspect <file>` | Detects the format and shows the multisig: members, threshold, the first-R rule and which lock deployment it uses. Gives every signature a verdict: valid, signed a different transaction, not a member, or duplicate. Ends with what's still missing |
+| `ckb-msig inspect <file> [inputs…]` | Detects the format and shows the multisig: members, threshold, the first-R rule and which lock deployment it uses. Also checks signatures from other files or pasted `ckb-cli deploy sign-txs` output, without changing anything. Gives every signature a verdict: valid, duplicate, or not valid for this transaction. When the file names the signer, it says whether the signature was made on a different transaction or by a key that isn't a member. Ends with what's still missing |
 | `ckb-msig add <file> <inputs…>` | Merges signatures from other files, or from pasted `ckb-cli deploy sign-txs` output, checking each one |
 | `ckb-msig convert <file> --to <format>` | Writes the same transaction and its valid signatures for `ckb-cli`, `ckb-cli-deploy`, `neuron` or `ccc` |
 | `ckb-msig finalize <file> [--send <rpc>]` | Picks exactly M valid signatures that satisfy the first-R rule, builds the witness and writes a transaction ready to send. `--send` broadcasts it |
@@ -146,7 +143,7 @@ A workflow example will come with the first release.
 | ckb-cli transaction file | `ckb-cli tx init`, `sign-inputs`, `add-signature` | Beside the transaction in `signatures`, keyed by lock arg. The configs are in `multisig_configs` | No. Input locks need one RPC call |
 | ckb-cli deploy info file | `ckb-cli deploy gen-txs`, `sign-txs` | `cell_tx_signatures` and `dep_group_tx_signatures`, keyed by lock arg | Yes, from `used_input_txs` |
 | Neuron offline JSON | Neuron's multisig Export | Signature bytes in the witness. The signers' key hashes are in `transaction.signatures` | Yes, from `context` |
-| CCC transaction | Apps built on CCC | In the witness only | No. Input locks need one RPC call |
+| CCC transaction (JSON from `ccc.stringify`) | Apps built on CCC | In the witness only | No. Input locks need one RPC call |
 
 `ckb-cli deploy sign-txs` prints one signature per lock arg, but the info file stores a list. ckb-msig accepts both.
 
@@ -164,7 +161,8 @@ All three use the same witness layout, so ckb-msig can verify and merge signatur
 
 - **A signature is tied to one exact transaction.** Any change to the transaction, its fee or the group's witnesses voids every signature collected so far. ckb-msig detects this but can't repair it.
 - **ckb-msig doesn't sign.** For the 2024 deployment, signatures have to come from a wallet that supports it, such as an app built on CCC.
-- **Not supported yet:** Omnilock's multisig mode, time-locked multisig (lock args with a `since` value), and CoBuild building packets.
+- **Lock types:** ckb-msig checks multisig inputs and ordinary single-key (`secp256k1_blake160_sighash_all`) inputs in the same transaction. An input under any other lock, such as Omnilock, JoyID or anyone-can-pay, is refused with a message naming the lock.
+- **Not supported yet:** time-locked multisig (lock args with a `since` value) and CoBuild building packets.
 
 ## Roadmap
 
@@ -178,7 +176,7 @@ All three use the same witness layout, so ckb-msig can verify and merge signatur
   - shared signing sessions over a relay or peer-to-peer transport
   - notifications
   - time-locked multisig
-  - Omnilock multisig
+  - other lock types next to multisig, starting with Omnilock's multisig mode, then JoyID and anyone-can-pay
   - a review view for script upgrades
 
 ## Related projects
