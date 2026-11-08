@@ -1,0 +1,33 @@
+{
+  "name": "ckb-msig",
+  "version": "0.0.0",
+  "description": "Check, merge and convert CKB multisig signatures between ckb-cli, Neuron and CCC.",
+  "license": "MIT",
+  "author": "Steven Hert",
+  "type": "module",
+  "engines": {
+    "node": ">=22"
+  },
+  "bin": {
+    "ckb-msig": "lib/cli/main.js"
+  },
+  "files": [
+    "lib",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit && tsc -p test/tsconfig.json",
+    "test": "vitest run",
+    "fixtures:fetch": "node scripts/fetch-fixtures.mjs"
+  },
+  "dependencies": {
+    "@ckb-ccc/core": "1.23.0"
+  },
+  "devDependencies": {
+    "@types/node": "22.20.5",
+    "typescript": "7.0.2",
+    "vitest": "5.1.0"
+  }
+}
