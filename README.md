@@ -189,7 +189,7 @@ All three use the same witness layout, so ckb-msig can verify and merge signatur
 
 ## Maintainers
 
-[@steven3002](https://github.com/steven3002)
+[ILE Labs](https://github.com/ILE-Labs)
 
 ## Contributing
 
