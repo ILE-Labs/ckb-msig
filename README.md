@@ -10,7 +10,7 @@ ckb-msig is a command-line tool and GitHub Action for teams that sign together o
 
 It never holds keys and never signs.
 
-> **Status:** early development. Nothing is published yet. The commands below describe the planned interface for v0.1.0 and may change.
+> **Status:** early development. Version 0.0.1 is a prototype with one command, `inspect`, for ckb-cli deploy info files. The other commands below are planned for v0.1.0 and may change.
 
 ## Table of Contents
 
@@ -51,16 +51,16 @@ There are also three multisig lock deployments in use, and not every wallet can 
 
 ## Install
 
-Not on npm yet. Once v0.1.0 is released:
+Install the 0.0.1 prototype:
 
 ```sh
-npm install --global ckb-msig
+npm install --global @ile_labs/ckb-msig
 ```
 
 Or run it without installing:
 
 ```sh
-npx ckb-msig --help
+npx @ile_labs/ckb-msig --help
 ```
 
 **Requirements:**
@@ -70,6 +70,8 @@ npx ckb-msig --help
 ## Usage
 
 ### CLI
+
+Version 0.0.1 has `inspect` for ckb-cli deploy info files. The other commands are planned.
 
 | Command | What it does |
 |---|---|
