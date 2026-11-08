@@ -56,4 +56,4 @@ This branch collects public evidence that people who sign together on Nervos CKB
 - **Reddit** couldn't be read (HTTP 403).
 - **No earlier grant proposal** for a multisig coordinator was found on Nervos Talk. The closest earlier work is a 2024 proof of concept (sources.md, row 4).
 
-Compiled by ILE Labs, 8 November 2026.
+Compiled on 8 November 2026.
