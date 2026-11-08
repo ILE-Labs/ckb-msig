@@ -1,5 +1,5 @@
 import { spawnSync } from "node:child_process";
-import { existsSync, mkdtempSync, writeFileSync } from "node:fs";
+import { existsSync, mkdtempSync, readFileSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -78,5 +78,19 @@ describe("the built ckb-msig command", () => {
     expect(code).toBe(1);
     expect(stdout).toBe("");
     expect(stderr).toContain(`input transaction ${previous} in used_input_txs doesn't match its hash`);
+  });
+
+  it("prints the usage for --help and exits 0", () => {
+    const { code, stdout, stderr } = run(["--help"]);
+    expect(code).toBe(0);
+    expect(stdout).toContain("usage: ckb-msig inspect <file>");
+    expect(stderr).toBe("");
+  });
+
+  it("prints the package version for --version and exits 0", () => {
+    const { version } = JSON.parse(readFileSync(new URL("../../package.json", import.meta.url), "utf8")) as { version: string };
+    const { code, stdout } = run(["--version"]);
+    expect(code).toBe(0);
+    expect(stdout).toBe(`${version}\n`);
   });
 });

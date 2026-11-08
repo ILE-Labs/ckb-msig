@@ -21,4 +21,12 @@ describe("parseCommandLine", () => {
       expect(() => parseCommandLine(argv)).toThrow(expect.objectContaining({ kind: "usage" }));
     },
   );
+
+  it.each([[["--help"]], [["-h"]], [["inspect", "x", "--help"]]])("reads %j as a help request", (argv) => {
+    expect(parseCommandLine(argv)).toEqual({ command: "help" });
+  });
+
+  it.each([[["--version"]], [["-v"]]])("reads %j as a version request", (argv) => {
+    expect(parseCommandLine(argv)).toEqual({ command: "version" });
+  });
 });
