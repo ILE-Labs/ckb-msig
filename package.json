@@ -1,7 +1,24 @@
 {
-  "name": "ckb-msig",
-  "version": "0.0.0",
+  "name": "@ile_labs/ckb-msig",
+  "version": "0.0.1",
   "description": "Check, merge and convert CKB multisig signatures between ckb-cli, Neuron and CCC.",
+  "keywords": [
+    "ckb",
+    "nervos",
+    "multisig",
+    "ckb-cli",
+    "neuron",
+    "ccc",
+    "cli"
+  ],
+  "homepage": "https://github.com/ILE-Labs/ckb-msig#readme",
+  "bugs": {
+    "url": "https://github.com/ILE-Labs/ckb-msig/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ILE-Labs/ckb-msig.git"
+  },
   "license": "MIT",
   "author": "Steven Hert",
   "type": "module",
@@ -20,7 +37,8 @@
     "build": "tsc -p tsconfig.json",
     "typecheck": "tsc -p tsconfig.json --noEmit && tsc -p test/tsconfig.json",
     "test": "vitest run",
-    "fixtures:fetch": "node scripts/fetch-fixtures.mjs"
+    "fixtures:fetch": "node scripts/fetch-fixtures.mjs",
+    "prepublishOnly": "npm run build"
   },
   "dependencies": {
     "@ckb-ccc/core": "1.23.0"
